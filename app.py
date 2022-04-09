@@ -9,8 +9,9 @@ api = Api(app)
 country_dao_fields = {
     "name": fields.String,
     "alpha_2_code": fields.String,
-    "alpha_3_code": fields.String
+    "alpha_3_code": fields.String,
 }
+
 
 class CountryDao:
     def __init__(
@@ -29,12 +30,25 @@ COUNTRIES = [
     CountryDao("Brunei", "BN", "BRN", ["BND", "SGD"]),
 ]
 
-class CountryResource(Resource):
+
+class CountriesResource(Resource):
     @marshal_with(country_dao_fields)
     def get(self):
         return COUNTRIES
 
-api.add_resource(CountryResource, "/countries")
+
+class CountryResource(Resource):
+    @marshal_with(country_dao_fields)
+    def get(self, code):
+        countries = [
+            x for x in COUNTRIES if x.alpha_2_code == code or x.alpha_3_code == code
+        ]
+
+        return countries[0]
+
+
+api.add_resource(CountriesResource, "/countries")
+api.add_resource(CountryResource, "/country/<string:code>")
 
 if __name__ == "__main__":
     app.run(debug=True)
