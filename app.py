@@ -10,6 +10,7 @@ country_dao_fields = {
     "name": fields.String,
     "alpha_2_code": fields.String,
     "alpha_3_code": fields.String,
+    "currencies": fields.Raw,
 }
 
 
