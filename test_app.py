@@ -38,3 +38,12 @@ def test_get_country_by_alpha_2_code():
         response = test_client.get("/country/US")
         res = json.loads(response.data.decode("utf-8"))
         assert res["name"] == "United States of America"
+
+
+def test_delete_country_by_alpha_2_code():
+    with app.test_client() as test_client:
+        test_client.delete("/country/US")
+
+        response = test_client.get("/countries")
+        res = json.loads(response.data.decode("utf-8"))
+        assert len(res) == 3

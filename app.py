@@ -38,8 +38,8 @@ class CountriesResource(Resource):
     def get(self):
         currency = request.args.get("currency", default=None, type=str)
         if currency == None:
-            return COUNTRIES
-        return [x for x in COUNTRIES if currency in x.currencies]
+            return [x for x in COUNTRIES if x.active]
+        return [x for x in COUNTRIES if currency in x.currencies and x.active]
 
 
 class CountryResource(Resource):
@@ -50,6 +50,14 @@ class CountryResource(Resource):
         ]
 
         return countries[0]
+
+    def delete(self, code):
+        countries = [
+            x for x in COUNTRIES if x.alpha_2_code == code or x.alpha_3_code == code
+        ]
+
+        for country in countries:
+            country.active = False
 
 
 api.add_resource(CountriesResource, "/countries")
