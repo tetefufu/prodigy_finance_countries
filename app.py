@@ -5,28 +5,12 @@ import jsonify
 app = Flask(__name__)
 api = Api(app)
 
-resource_fields = {
-    'task':   fields.String
+
+country_dao_fields = {
+    "name": fields.String,
+    "alpha_2_code": fields.String,
+    "alpha_3_code": fields.String
 }
-
-class TodoDao:
-    def __init__(self, todo_id, task):
-        self.todo_id = todo_id
-        self.task = task
-
-        # This field will not be sent in the response
-        self.status = 'active'
-
-class Todo(Resource):
-    @marshal_with(resource_fields)
-    def get(self, **kwargs):
-        return TodoDao(todo_id='my_todo', task='Remember the milk')
-
-class Todos(Resource):
-    @marshal_with(resource_fields)
-    def get(self):
-        return TODOS_ALL
-
 
 class CountryDao:
     def __init__(
@@ -36,31 +20,21 @@ class CountryDao:
         self.alpha_2_code = alpha_2_code
         self.alpha_3_code = alpha_3_code
         self.currencies = currencies
+        self.active = True
 
 
 COUNTRIES = [
     CountryDao("United States of America", "US", "USA", ["USD"]),
     CountryDao("Ukraine", "UA", "UKR", ["UAH"]),
+    CountryDao("Brunei", "BN", "BRN", ["BND", "SGD"]),
 ]
-
-TODOS_ALL = [
-    TodoDao("1", "laundry"),
-    TodoDao("2", "dishes")
-]
-
-TODOS = {
-    'todo1': {'task': 'build an API'},
-    'todo2': {'task': '?????'},
-    'todo3': {'task': 'profit!'},
-}
 
 class CountryResource(Resource):
+    @marshal_with(country_dao_fields)
     def get(self):
-        return TODOS
+        return COUNTRIES
 
 api.add_resource(CountryResource, "/countries")
-api.add_resource(Todo, "/todo")
-api.add_resource(Todos, "/todos")
 
 if __name__ == "__main__":
     app.run(debug=True)
