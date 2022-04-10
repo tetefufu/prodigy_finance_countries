@@ -7,9 +7,12 @@ class CountriesResource(Resource):
     @marshal_with(country_dao_fields)
     def get(self):
         currency = request.args.get("currency", default=None, type=str)
-        if currency == None:
-            return [x for x in COUNTRIES if x.active]
-        return [x for x in COUNTRIES if currency in x.currencies and x.active]
+
+        countries = [x for x in COUNTRIES if x.active]
+        if currency != None:
+            countries = [x for x in countries if currency in x.currencies]
+
+        return countries
 
 
 class CountryResource(Resource):
