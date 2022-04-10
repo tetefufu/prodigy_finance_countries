@@ -1,4 +1,4 @@
-from flask import request
+from flask import request, abort
 from flask_restful import Resource, marshal_with
 from dao import country_dao_fields, COUNTRIES
 
@@ -25,7 +25,7 @@ class CountryResource(Resource):
         if countries:
             return countries[0]
         else:
-            return None, 404
+            abort(404, f"country with code {code} not found")
 
     def delete(self, code):
         countries = [
