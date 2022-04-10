@@ -2,11 +2,15 @@
 
 ## Quick Start
 
-1. Use Visual Studio Code with Docker Containers Extension
+1. Open VS Code with [Remote - Containers](https://marketplace.visualstudio.com/items?itemName=ms-vscode-remote.remote-containers) Extension 
 
 2. Clone Repo
 
-3. Open Folder in Container
+3. Click "Remote - Containers" button (bottom left corner) and choose "Open Folder in Container"
+
+You can then run tests using VS Code's Testing tab
+
+or hit F5 to run (and debug) the API locally 
 
 ## Requirements
 
@@ -14,26 +18,26 @@ For this next stage, we would like you to complete the following take-home assig
 
 ### Scenario
 
-The company has a need for a standardised internal source of country information. Using Rails or a Python framework of your choice (Django, Flask, etc.), build a JSON REST API to provide country information.
+*The company has a need for a standardised internal source of country information. Using Rails or a Python framework of your choice (Django, Flask, etc.), build a JSON REST API to provide country information.*
 
 Requirements:
 
-List all countries providing at least country name, alpha 2 code, alpha 3 code and the currencies available.
+ - List all countries providing at least country name, alpha 2 code, alpha 3 code and the currencies available.
 
-Please allow for the ability to filter on currency
+- Please allow for the ability to filter on currency
 
-Return a single country based upon the alpha 2 or alpha 3 code
+- Return a single country based upon the alpha 2 or alpha 3 code
 
-An interface to allow “soft-deletion” of countries.
+- An interface to allow “soft-deletion” of countries.
 
-Be sure to add unit tests.
+- Be sure to add unit tests.
 
-For the sake of simplicity, ignore any auth considerations at this point.
+- For the sake of simplicity, ignore any auth considerations at this point.
 
-As mentioned, do not feel the need to spend more than 4 hours on this - we prefer tested features and incomplete over completed but buggy.
+- As mentioned, do not feel the need to spend more than 4 hours on this - we prefer tested features and incomplete over completed but buggy.
 
-Also, a basic solution is fine - no need to over engineer.
+- Also, a basic solution is fine - no need to over engineer.
 
-For the country data, please feel free to use any small sample of 3-4 countries of your choice. If certain aspects of the task seem ambiguous, please interpret them in a way that makes sense to you - there is no right or wrong answer, as long as you can justify your solution.
+- For the country data, please feel free to use any small sample of 3-4 countries of your choice. If certain aspects of the task seem ambiguous, please interpret them in a way that makes sense to you - there is no right or wrong answer, as long as you can justify your solution.
 
 Please place the completed assignment on Dropbox, you will be able to submit this without creating an account, and email a publicly accessible link to graeme.longman@prodigyfinance.com by Monday 11th April COB.
