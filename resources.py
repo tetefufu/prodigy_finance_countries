@@ -22,7 +22,10 @@ class CountryResource(Resource):
             x for x in COUNTRIES if x.alpha_2_code == code or x.alpha_3_code == code
         ]
 
-        return countries[0]
+        if countries:
+            return countries[0]
+        else:
+            return None, 404
 
     def delete(self, code):
         countries = [

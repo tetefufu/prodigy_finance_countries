@@ -40,9 +40,26 @@ def test_get_country_by_alpha_2_code():
         assert res["name"] == "United States of America"
 
 
+def test_get_country_by_alpha_2_code_returns_404_given_invalid_code():
+    with app.test_client() as test_client:
+        response = test_client.get("/country/INVALID")
+        assert response.status_code == 404
+        res = json.loads(response.data.decode("utf-8"))
+        print(res)
+
+
 def test_delete_country_by_alpha_2_code():
     with app.test_client() as test_client:
         test_client.delete("/country/US")
+
+        response = test_client.get("/countries")
+        res = json.loads(response.data.decode("utf-8"))
+        assert len(res) == 3
+
+
+def test_delete_country_by_alpha_3_code():
+    with app.test_client() as test_client:
+        test_client.delete("/country/USA")
 
         response = test_client.get("/countries")
         res = json.loads(response.data.decode("utf-8"))
