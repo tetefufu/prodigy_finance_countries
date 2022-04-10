@@ -1,74 +1,68 @@
-import json
-from app import app
+from testing_utils import test_client_get, test_client_delete
 
 
-def test_get_all_countries():
-    with app.test_client() as test_client:
-        response = test_client.get("/countries")
-        response_data = json.loads(response.data.decode("utf-8"))
-        usa = response_data[0]
+def test_get_all_countries_returns_countries():
+    data, status_code = test_client_get("/countries")
+    usa = data[0]
 
-        assert len(response_data) == 4
-        assert usa["name"] == "United States of America"
-        assert usa["alpha_2_code"] == "US"
-        assert usa["alpha_3_code"] == "USA"
-        assert usa["currencies"][0] == "USD"
-
-
-def test_get_country_given_currency():
-    with app.test_client() as test_client:
-        response = test_client.get("/countries?currency=USD")
-        response_data = json.loads(response.data.decode("utf-8"))
-        usa = response_data[0]
-
-        assert len(response_data) == 1
-        assert usa["name"] == "United States of America"
-        assert usa["alpha_2_code"] == "US"
-        assert usa["alpha_3_code"] == "USA"
-        assert usa["currencies"][0] == "USD"
+    assert status_code == 200
+    assert len(data) == 4
+    assert usa["name"] == "United States of America"
+    assert usa["alpha_2_code"] == "US"
+    assert usa["alpha_3_code"] == "USA"
+    assert usa["currencies"][0] == "USD"
 
 
-def test_get_country_by_alpha_3_code():
-    with app.test_client() as test_client:
-        response = test_client.get("/country/USA")
-        response_data = json.loads(response.data.decode("utf-8"))
+def test_get_country_returns_correct_countries_given_currency():
+    data, status_code = test_client_get("/countries?currency=USD")
+    usa = data[0]
 
-        assert response_data["name"] == "United States of America"
-
-
-def test_get_country_by_alpha_2_code():
-    with app.test_client() as test_client:
-        response = test_client.get("/country/US")
-        response_data = json.loads(response.data.decode("utf-8"))
-
-        assert response_data["name"] == "United States of America"
+    assert status_code == 200
+    assert len(data) == 1
+    assert usa["name"] == "United States of America"
+    assert usa["alpha_2_code"] == "US"
+    assert usa["alpha_3_code"] == "USA"
+    assert usa["currencies"][0] == "USD"
 
 
-def test_get_country_by_alpha_2_code_returns_404_given_invalid_code():
-    with app.test_client() as test_client:
-        response = test_client.get("/country/INVALID")
+def test_get_country_returns_correct_country_given_alpha_3_code():
+    data, status_code = test_client_get("/country/USA")
 
-        response_data = json.loads(response.data.decode("utf-8"))
-
-        assert response.status_code == 404
-        assert response_data["message"] == "country with code INVALID not found"
+    assert status_code == 200
+    assert data["name"] == "United States of America"
 
 
-def test_delete_country_by_alpha_2_code():
-    with app.test_client() as test_client:
-        test_client.delete("/country/US")
+def test_get_country_returns_correct_country_given_alpha_2_code():
+    data, status_code = test_client_get("/country/US")
 
-        response = test_client.get("/countries")
-        response_data = json.loads(response.data.decode("utf-8"))
-
-        assert len(response_data) == 3
+    assert status_code == 200
+    assert data["name"] == "United States of America"
 
 
-def test_delete_country_by_alpha_3_code():
-    with app.test_client() as test_client:
-        test_client.delete("/country/USA")
+def test_get_country_by_alpha_2_code__then_returns_404_given_invalid_code():
+    data, status_code = test_client_get("/country/INVALID")
 
-        response = test_client.get("/countries")
-        response_data = json.loads(response.data.decode("utf-8"))
+    assert status_code == 404
+    assert data["message"] == "country with code INVALID not found"
 
-        assert len(response_data) == 3
+
+def test_delete_country_by_alpha_2_code_then_country_removed_from_list():
+    data, status_code = test_client_delete("/country/US")
+
+    assert status_code == 200
+
+    data, status_code = test_client_get("/countries")
+
+    assert status_code == 200
+    assert len(data) == 3
+
+
+def test_delete_country_by_alpha_3_code_then_country_removed_from_list():
+    data, status_code = test_client_delete("/country/USA")
+
+    assert status_code == 200
+
+    data, status_code = test_client_get("/countries")
+
+    assert status_code == 200
+    assert len(data) == 3
